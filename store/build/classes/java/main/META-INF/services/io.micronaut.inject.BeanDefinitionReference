@@ -1,0 +1,4 @@
+com.store.endpoint.$$ItemEndpointDefinition$InterceptedDefinitionClass
+com.store.repository.$$ItemRepositoryDefinition$InterceptedDefinitionClass
+com.store.endpoint.$ItemEndpointDefinitionClass
+com.store.repository.$ItemRepositoryDefinitionClass

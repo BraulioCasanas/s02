@@ -1,0 +1,22 @@
+version: "3"
+services:
+  cliets-db:
+    image: postgres:alpine
+    container_name: cliets-db
+    hostname: cliets-db
+    environment:
+      POSTGRES_USER: usr01
+      POSTGRES_PASSWORD: 5Z8Qn3NSdTT1xa
+      POSTGRES_DB: clients
+    ports:
+      - "5431:5432"
+  store-db:
+    image: postgres:alpine
+    container_name: store-db
+    hostname: store-db
+    environment:
+      POSTGRES_USER: usr02
+      POSTGRES_PASSWORD: XrRVlUr6SCIHVo
+      POSTGRES_DB: store
+    ports:
+      - "5432:5432"

@@ -1,0 +1,4 @@
+com.store.entity.$CategoryEntity$IntrospectionRef
+com.store.entity.$ItemEntity$IntrospectionRef
+com.store.dto.$ItemSaveCommand$IntrospectionRef
+com.store.dto.$ItemUpdateCommand$IntrospectionRef
