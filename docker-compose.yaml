@@ -1,5 +1,97 @@
+x-logging: &default-logging
+  driver: loki
+  options:
+    loki-url: 'http://localhost:3100/api/prom/push'
+    labels: namespace
+    loki-relabel-config: |
+      - action: replace
+        source_labels: ["namespace","compose_service"]
+        separator: "/"
+        target_label: job
+      - action: replace
+        source_labels: ["container_name"]
+        target_label: instance
 version: "3"
 services:
+  
+  loki:
+    container_name: loki
+    restart: always
+    hostname: loki
+    image: grafana/loki
+    volumes:
+      - ./etc/loki-local.yaml:/etc/loki/local-config.yaml
+    command: -config.file=/etc/loki/local-config.yaml
+    ports:
+      - 3100:3100
+      
+  prometheus:
+    image: prom/prometheus
+    container_name: prometheus
+    restart: always
+    hostname: prometheus
+    environment:
+      TZ: America/Mexico_City
+    ports:
+      - 9090:9090
+    volumes:
+      - ./etc/prometheus.yaml:/etc/prometheus/prometheus.yml
+    logging: *default-logging
+    
+  grafana:
+    image: grafana/grafana
+    volumes:
+      - ./data/grafana-data/datasources:/etc/grafana/provisioning/datasources
+      - ./data/grafana-data/dashboards-provisioning:/etc/grafana/provisioning/dashboards
+      - ./data/grafana-data/dashboards:/var/lib/grafana/dashboards
+    environment:
+      - GF_AUTH_ANONYMOUS_ENABLED=true
+      - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
+      - GF_AUTH_DISABLE_LOGIN_FORM=true
+    ports:
+      - "3000:3000"
+    logging: *default-logging
+    
+  jeager:
+    image: jaegertracing/all-in-one:latest
+    ports:
+      - "5775:5775"
+      - "6831:6831"
+      - "6832:6832"
+      - "5778:5778"
+      - "16686:16686"
+      - "14268:14268"
+      - "14250:14250"
+    logging: *default-logging
+  
+  client:
+    image: brauliocasanas/clients:1.0-SNAPSHOT
+    container_name: client
+    hostname: client
+    environment:
+      QUARKUS_DATASOURCE_JDBC_URL: jdbc:tracing:postgresql://cliets-db:5432/clients
+#      QUARKUS_OPENTELEMETRY_TRACER_EXPORTER_JAEGER_ENDPOINT: http://jeager:14250/api/traces
+#      QUARKUS_JAEGER_ENDPOINT: http://jeager:14250/api/traces
+      JAEGER_AGENT_HOST: jeager
+      JAEGER_AGENT_PORT: 6831
+    ports:
+      - "8081:8081"
+    depends_on:
+      - cliets-db
+    logging: *default-logging
+    
+  store:
+    image: store
+    container_name: store
+    hostname: store
+    environment:
+      DATASOURCES_DEFAULT_URL: jdbc:postgresql://store-db:5432/store
+    ports:
+      - "8082:8082"
+    depends_on:
+      - store-db
+    logging: *default-logging
+  
   cliets-db:
     image: postgres:alpine
     container_name: cliets-db
@@ -10,6 +102,8 @@ services:
       POSTGRES_DB: clients
     ports:
       - "5431:5432"
+    logging: *default-logging
+    
   store-db:
     image: postgres:alpine
     container_name: store-db
@@ -20,3 +114,4 @@ services:
       POSTGRES_DB: store
     ports:
       - "5432:5432"
+    logging: *default-logging
