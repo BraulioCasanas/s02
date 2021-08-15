@@ -5,10 +5,22 @@
         <!-- encoders are assigned the type
              ch.qos.logback.classic.encoder.PatternLayoutEncoder by default -->
         <encoder>
-            <pattern>%cyan(%d{HH:mm:ss.SSS}) %gray([%thread]) %highlight(%-5level) %magenta(%logger{36}) - %msg%n
+            <pattern>%cyan(%d{HH:mm:ss.SSS}) %gray([%thread]) traceId=%X{trace_id}, parentId=%X{parent_id}, spanId=%X{span_id}, sampled=%X{sampled} %highlight(%-5level) %magenta(%logger{36}) - %msg%n
             </pattern>
         </encoder>
     </appender>
+
+    <Logger name="org.hibernate.type" level="debug"/>
+    <Logger name="org.hibernate.type.BasicTypeRegistry" level="info"/>
+    <logger name="org.hibernate.type.descriptor.sql" level="info"/>
+    <logger name="org.hibernate.type.descriptor.sql.BasicBinder" level="trace"/>
+    <logger name="org.hibernate.type.descriptor.sql.BasicExtractor" level="info"/>
+    <logger name="org.hibernate.SQL" level="trace"/>
+    <Logger name="org.hibernate.tool.hbm2ddl" level="debug"/>
+    <Logger name="org.hibernate.jdbc" level="debug"/>
+    <Logger name="org.hibernate.hql.ast.AST" level="debug"/>
+    <Logger name="org.hibernate.secure" level="debug"/>
+    <Logger name="org.hibernate" level="info"/>
 
     <root level="info">
         <appender-ref ref="STDOUT"/>

@@ -22,9 +22,16 @@ jpa:
       hibernate:
         hbm2ddl:
           auto: update
-        show_sql: true
-tracing:
-  jaeger:
-    enabled: true
-    sampler:
-      probability: 0.1
+        show_sql: false
+        
+#tracing:
+#  jaeger:
+#    enabled: true
+#    sampler:
+#      probability: 0.5
+#    sender:
+##      agent-host: localhost
+##      agent-port: 5775
+#    reporter:
+#      log-spans: true
+#    expand-exception-logs: true

@@ -4,19 +4,15 @@ import com.store.dto.ItemSaveCommand;
 import com.store.dto.ItemUpdateCommand;
 import com.store.entity.ItemEntity;
 import com.store.repository.ItemRepository;
-import io.micronaut.http.HttpHeaders;
-import io.micronaut.http.HttpResponse;
-import io.micronaut.http.annotation.*;
-import io.micronaut.scheduling.TaskExecutors;
-import io.micronaut.scheduling.annotation.ExecuteOn;
 
-import javax.persistence.PersistenceException;
 import javax.validation.Valid;
+import javax.ws.rs.*;
+import javax.ws.rs.core.HttpHeaders;
+import javax.ws.rs.core.Response;
 import java.net.URI;
 import java.util.List;
 
-@ExecuteOn(TaskExecutors.IO)
-@Controller("/item")
+@Path("/item")
 public class ItemEndpoint {
 
     private final ItemRepository itemRepository;
@@ -25,52 +21,46 @@ public class ItemEndpoint {
         this.itemRepository = itemRepository;
     }
 
-    @Get("/{id}")
-    public ItemEntity show(Long id) {
+    @GET
+    @Path("/{id}")
+    public ItemEntity show(@PathParam("id") Long id) {
         return itemRepository
                 .findById(id)
                 .orElse(null);
     }
 
-    @Post(value = "/update")
-    public HttpResponse update(@Body @Valid ItemUpdateCommand command) {
+    @POST
+    @Path(value = "/update")
+    public Response update(@Valid ItemUpdateCommand command) {
         int numberOfEntitiesUpdated = itemRepository.update(command.getId(), command.getName(), command.getDescription());
 
-        return HttpResponse
+        return Response
                 .noContent()
-                .header(HttpHeaders.LOCATION, location(command.getId()).getPath());
+                .header(HttpHeaders.LOCATION, location(command.getId()).getPath())
+                .build();
     }
 
-    @Get(value = "/list")
+    @GET
+    @Path(value = "/list")
     public List<ItemEntity> list() {
         return itemRepository.findAll();
     }
 
-    @Put(value = "/save")
-    public HttpResponse<ItemEntity> save(@Body @Valid ItemSaveCommand cmd) {
+    @PUT
+    @Path(value = "/save")
+    public Response save(@Valid ItemSaveCommand cmd) {
         ItemEntity genre = itemRepository.save(cmd.getName());
 
-        return HttpResponse
-                .created(genre)
-                .headers(headers -> headers.location(location(genre.getId())));
+        return Response
+                .ok(genre)
+                .build();
     }
 
-    @Post("/ex")
-    public HttpResponse<ItemEntity> saveExceptions(@Body @Valid ItemSaveCommand cmd) {
-        try {
-            ItemEntity genre = itemRepository.saveWithException(cmd.getName());
-            return HttpResponse
-                    .created(genre)
-                    .headers(headers -> headers.location(location(genre.getId())));
-        } catch(PersistenceException e) {
-            return HttpResponse.noContent();
-        }
-    }
-
-    @Delete("/delete/{id}")
-    public HttpResponse delete(Long id) {
+    @DELETE
+    @Path("/delete/{id}")
+    public Response delete(@PathParam("id") Long id) {
         itemRepository.deleteById(id);
-        return HttpResponse.noContent();
+        return Response.noContent().build();
     }
 
     protected URI location(Long id) {

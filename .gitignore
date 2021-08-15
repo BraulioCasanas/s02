@@ -6,4 +6,6 @@ gradle
 /gradlew
 /gradlew.bat
 /store/.gradle/
+/store/build/
 /clients/.gradle/
+/clients/build/

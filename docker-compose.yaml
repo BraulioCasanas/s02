@@ -54,10 +54,12 @@ services:
     
   jeager:
     image: jaegertracing/all-in-one:latest
+    environment:
+      COLLECTOR_ZIPKIN_HTTP_PORT: 9411
     ports:
-      - "5775:5775"
-      - "6831:6831"
-      - "6832:6832"
+      - "5775:5775/udp"
+      - "6831:6831/udp"
+      - "6832:6832/udp"
       - "5778:5778"
       - "16686:16686"
       - "14268:14268"
@@ -70,8 +72,6 @@ services:
     hostname: client
     environment:
       QUARKUS_DATASOURCE_JDBC_URL: jdbc:tracing:postgresql://cliets-db:5432/clients
-#      QUARKUS_OPENTELEMETRY_TRACER_EXPORTER_JAEGER_ENDPOINT: http://jeager:14250/api/traces
-#      QUARKUS_JAEGER_ENDPOINT: http://jeager:14250/api/traces
       JAEGER_AGENT_HOST: jeager
       JAEGER_AGENT_PORT: 6831
     ports:
@@ -86,6 +86,10 @@ services:
     hostname: store
     environment:
       DATASOURCES_DEFAULT_URL: jdbc:postgresql://store-db:5432/store
+      TRACING_JEAGER_ENABLED: "true"
+      TRACING_JEAGER_SAMPLER_PROBABILITY: 0.5
+      TRACING_JEAGER_SEDER_AGENT-HOST: jeager
+      TRACING_JEAGER_SEDER_AGENT-PORT: 5775
     ports:
       - "8082:8082"
     depends_on:
