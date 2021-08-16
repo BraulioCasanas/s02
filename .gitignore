@@ -9,3 +9,7 @@ gradle
 /store/build/
 /clients/.gradle/
 /clients/build/
+/client/gradlew
+/client/gradlew.bat
+/store/gradlew
+/store/gradlew.bat

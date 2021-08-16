@@ -1,6 +1,6 @@
 micronaut:
   application:
-    name: store
+    name: client
   metrics:
     enabled: true
     export:
@@ -9,13 +9,13 @@ micronaut:
         descriptions: true
         step: PT1M
   server:
-    port: 8082
+    port: 8081
 datasources:
   default:
-    url: jdbc:postgresql://localhost:5432/store
+    url: jdbc:postgresql://localhost:5431/client
     driverClassName: org.postgresql.Driver
-    username: usr02
-    password: XrRVlUr6SCIHVo
+    username: usr01
+    password: 5Z8Qn3NSdTT1xa
 jpa:
   default:
     properties:

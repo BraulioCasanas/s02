@@ -67,13 +67,11 @@ services:
     logging: *default-logging
   
   client:
-    image: brauliocasanas/clients:1.0-SNAPSHOT
+    image: client
     container_name: client
     hostname: client
     environment:
-      QUARKUS_DATASOURCE_JDBC_URL: jdbc:tracing:postgresql://cliets-db:5432/clients
-      JAEGER_AGENT_HOST: jeager
-      JAEGER_AGENT_PORT: 6831
+      QUARKUS_DATASOURCE_JDBC_URL: jdbc:tracing:postgresql://cliet-db:5432/client
     ports:
       - "8081:8081"
     depends_on:
@@ -96,14 +94,14 @@ services:
       - store-db
     logging: *default-logging
   
-  cliets-db:
+  cliet-db:
     image: postgres:alpine
-    container_name: cliets-db
-    hostname: cliets-db
+    container_name: cliet-db
+    hostname: cliet-db
     environment:
       POSTGRES_USER: usr01
       POSTGRES_PASSWORD: 5Z8Qn3NSdTT1xa
-      POSTGRES_DB: clients
+      POSTGRES_DB: client
     ports:
       - "5431:5432"
     logging: *default-logging
