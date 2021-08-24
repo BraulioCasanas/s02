@@ -22,6 +22,8 @@ services:
     volumes:
       - ./etc/loki-local.yaml:/etc/loki/local-config.yaml
     command: -config.file=/etc/loki/local-config.yaml
+    environment:
+      TZ: America/Mexico_City
     ports:
       - 3100:3100
       
@@ -45,6 +47,7 @@ services:
       - ./data/grafana-data/dashboards-provisioning:/etc/grafana/provisioning/dashboards
       - ./data/grafana-data/dashboards:/var/lib/grafana/dashboards
     environment:
+      - TZ=America/Mexico_City
       - GF_AUTH_ANONYMOUS_ENABLED=true
       - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
       - GF_AUTH_DISABLE_LOGIN_FORM=true
@@ -54,8 +57,10 @@ services:
     
   jeager:
     image: jaegertracing/all-in-one:latest
+    hostname: jeager
+    container_name: jeager
     environment:
-      COLLECTOR_ZIPKIN_HTTP_PORT: 9411
+      TZ: America/Mexico_City
     ports:
       - "5775:5775/udp"
       - "6831:6831/udp"
@@ -71,11 +76,20 @@ services:
     container_name: client
     hostname: client
     environment:
-      QUARKUS_DATASOURCE_JDBC_URL: jdbc:tracing:postgresql://cliet-db:5432/client
+      TZ: America/Mexico_City
+      DATASOURCES_DEFAULT_URL: jdbc:postgresql://client-db:5432/client
+      OTEL_TRACES_EXPORTER: jaeger
+      OTEL_EXPORTER_JAEGER_ENDPOINT: http://jeager:14250
+      OTEL_SERVICE_NAME: clients
+      OTEL_METRICS_EXPORTER: none
     ports:
       - "8081:8081"
+#    entrypoint: ["java", "-javaagent:/opentelemetry-javaagent-all.jar", "-Xshare:off","-jar", "/home/app/application.jar"]
+#    entrypoint: java -javaagent:/opentelemetry-javaagent-all.jar -Xshare:off -jar /home/app/application.jar
+#    volumes:
+#      - /Users/brauliocasanas/demos/s02/opentelemetry-javaagent-all.jar:/opentelemetry-javaagent-all.jar
     depends_on:
-      - cliets-db
+      - client-db
     logging: *default-logging
     
   store:
@@ -83,22 +97,20 @@ services:
     container_name: store
     hostname: store
     environment:
+      TZ: America/Mexico_City
       DATASOURCES_DEFAULT_URL: jdbc:postgresql://store-db:5432/store
-      TRACING_JEAGER_ENABLED: "true"
-      TRACING_JEAGER_SAMPLER_PROBABILITY: 0.5
-      TRACING_JEAGER_SEDER_AGENT-HOST: jeager
-      TRACING_JEAGER_SEDER_AGENT-PORT: 5775
     ports:
       - "8082:8082"
     depends_on:
       - store-db
     logging: *default-logging
   
-  cliet-db:
+  client-db:
     image: postgres:alpine
-    container_name: cliet-db
-    hostname: cliet-db
+    container_name: client-db
+    hostname: client-db
     environment:
+      TZ: America/Mexico_City
       POSTGRES_USER: usr01
       POSTGRES_PASSWORD: 5Z8Qn3NSdTT1xa
       POSTGRES_DB: client
@@ -111,6 +123,7 @@ services:
     container_name: store-db
     hostname: store-db
     environment:
+      TZ: America/Mexico_City
       POSTGRES_USER: usr02
       POSTGRES_PASSWORD: XrRVlUr6SCIHVo
       POSTGRES_DB: store

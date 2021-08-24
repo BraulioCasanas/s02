@@ -1,2 +1,4 @@
 rootProject.name = 's02'
+include 'client'
+include 'store'
 
