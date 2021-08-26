@@ -2,8 +2,8 @@ package com.store.repository;
 
 import com.store.entity.ItemEntity;
 import io.micronaut.transaction.annotation.ReadOnly;
-import jakarta.inject.Singleton;
 
+import javax.inject.Singleton;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceException;
 import javax.persistence.TypedQuery;

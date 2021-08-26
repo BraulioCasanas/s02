@@ -2,10 +2,9 @@ package com.client.repository;
 
 import com.client.entity.ClientEntity;
 import io.micronaut.transaction.annotation.ReadOnly;
-import jakarta.inject.Singleton;
 
+import javax.inject.Singleton;
 import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
 import javax.persistence.TypedQuery;
 import javax.transaction.Transactional;
@@ -17,7 +16,6 @@ import java.util.Optional;
 @Singleton
 public class ClientRepository {
 
-    @PersistenceContext
     private final EntityManager entityManager;
 
     public ClientRepository(EntityManager entityManager) {

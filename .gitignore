@@ -13,3 +13,4 @@ gradle
 /client/gradlew.bat
 /store/gradlew
 /store/gradlew.bat
+/client/client.iml
