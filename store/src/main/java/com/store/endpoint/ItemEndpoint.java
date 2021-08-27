@@ -25,7 +25,7 @@ public class ItemEndpoint {
     @Path(("/externalCall"))
     public Response externalCall() {
         Integer integer = itemRepository.countItems();
-        return Response.ok(integer).build();
+        return Response.ok().build();
     }
 
     @GET
