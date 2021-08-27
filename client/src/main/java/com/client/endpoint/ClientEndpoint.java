@@ -4,6 +4,7 @@ import com.client.dto.ClientSaveCommand;
 import com.client.dto.ClientUpdateCommand;
 import com.client.entity.ClientEntity;
 import com.client.repository.ClientRepository;
+import com.client.service.ExternalStore;
 
 import javax.validation.Valid;
 import javax.ws.rs.*;
@@ -16,9 +17,17 @@ import java.util.List;
 public class ClientEndpoint {
 
     private final ClientRepository itemRepository;
+    private final ExternalStore externalStore;
 
-    public ClientEndpoint(ClientRepository itemRepository) {
+    public ClientEndpoint(ClientRepository itemRepository, ExternalStore externalStore) {
         this.itemRepository = itemRepository;
+        this.externalStore = externalStore;
+    }
+
+    @GET
+    @Path(("/externalCall"))
+    public Response externalCall() {
+        return externalStore.externalCall();
     }
 
     @GET

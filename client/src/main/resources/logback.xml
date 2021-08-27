@@ -4,7 +4,7 @@
         <withJansi>true</withJansi>
 
         <encoder>
-            <pattern>%cyan(%d{HH:mm:ss.SSS}) %gray([%thread]) traceId=%X{trace_id}, parentId=%X{parent_id}, spanId=%X{span_id}, sampled=%X{sampled} %highlight(%-5level) %magenta(%logger{36}) - %msg%n
+            <pattern>%cyan(%d{HH:mm:ss.SSS}) %gray([%thread]) traceId=%X{trace_id} spanId=%X{span_id} %highlight(%-5level) %magenta(%logger{36}) - %msg%n
             </pattern>
         </encoder>
     </appender>
