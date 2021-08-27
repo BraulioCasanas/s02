@@ -10,6 +10,9 @@ micronaut:
         step: PT1M
   server:
     port: 8081
+  http:
+    client:
+      log-level: info
 datasources:
   default:
     url: jdbc:postgresql://localhost:5431/client
