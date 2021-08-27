@@ -7,7 +7,7 @@ import io.micronaut.http.client.annotation.Client;
 
 import javax.ws.rs.core.Response;
 
-@Client("http://store")
+@Client("http://store.store.svc.cluster.local")
 @Header(name = HttpHeaders.USER_AGENT, value = "client")
 public interface ExternalStore {
 
