@@ -57,6 +57,12 @@ public class ItemRepository {
     }
 
     @Transactional
+    public Integer countItems() {
+        return entityManager.createQuery("SELECT count(i) from ItemEntity i")
+                .getFirstResult();
+    }
+
+    @Transactional
     public ItemEntity saveWithException(@NotBlank String name) {
         save(name);
         throw new PersistenceException();

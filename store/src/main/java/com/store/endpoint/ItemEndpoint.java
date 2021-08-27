@@ -22,6 +22,13 @@ public class ItemEndpoint {
     }
 
     @GET
+    @Path(("/externalCall"))
+    public Response externalCall() {
+        Integer integer = itemRepository.countItems();
+        return Response.ok(integer).build();
+    }
+
+    @GET
     @Path("/{id}")
     public ItemEntity show(@PathParam("id") Long id) {
         return itemRepository
