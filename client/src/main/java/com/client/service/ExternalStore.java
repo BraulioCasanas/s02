@@ -11,6 +11,6 @@ import javax.ws.rs.core.Response;
 @Header(name = HttpHeaders.USER_AGENT, value = "client")
 public interface ExternalStore {
 
-    @Get("/client/externalCall")
+    @Get("/item/externalCall")
     Response externalCall();
 }
