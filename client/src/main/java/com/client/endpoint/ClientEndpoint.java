@@ -5,6 +5,7 @@ import com.client.dto.ClientUpdateCommand;
 import com.client.entity.ClientEntity;
 import com.client.repository.ClientRepository;
 import com.client.service.ExternalStore;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.validation.Valid;
 import javax.ws.rs.*;
@@ -13,6 +14,7 @@ import javax.ws.rs.core.Response;
 import java.net.URI;
 import java.util.List;
 
+@Slf4j
 @Path("/client")
 public class ClientEndpoint {
 
@@ -28,7 +30,9 @@ public class ClientEndpoint {
     @Path(("/externalCall"))
 //    public Response externalCall() {
     public Integer externalCall() {
-        return externalStore.externalCall();
+        Integer records = externalStore.externalCall();
+        log.info("records :: ".concat(records.toString()));
+        return records;
     }
 
     @GET
