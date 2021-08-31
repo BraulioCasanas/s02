@@ -26,7 +26,8 @@ public class ClientEndpoint {
 
     @GET
     @Path(("/externalCall"))
-    public Response externalCall() {
+//    public Response externalCall() {
+    public Integer externalCall() {
         return externalStore.externalCall();
     }
 
