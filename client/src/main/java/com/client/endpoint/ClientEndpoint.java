@@ -39,13 +39,18 @@ public class ClientEndpoint {
     }
 
     @POST
-    @Path(value = "/update")
-    public Response update(@Valid ClientUpdateCommand command) {
-        int numberOfEntitiesUpdated = itemRepository.update(command.getId(), command.getName(), command.getDescription());
+    @Path(value = "/update/{id}")
+    public Response update(@PathParam("id") Long id, @Valid ClientUpdateCommand command) {
+
+        if (itemRepository.findById(id).isEmpty()) {
+            return Response.notModified("the user with id ".concat(id.toString()).concat(" not exist")).build();
+        }
+
+        int numberOfEntitiesUpdated = itemRepository.update(id, command.getName(), command.getDescription());
 
         return Response
                 .noContent()
-                .header(HttpHeaders.LOCATION, location(command.getId()).getPath())
+                .header(HttpHeaders.LOCATION, location(id).getPath())
                 .build();
     }
 
