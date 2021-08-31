@@ -39,7 +39,7 @@ public class ClientEndpoint {
     }
 
     @POST
-    @Path(value = "/update/{id}")
+    @Path(value = "/{id}")
     public Response update(@PathParam("id") Long id, @Valid ClientUpdateCommand command) {
 
         if (itemRepository.findById(id).isEmpty()) {
@@ -71,7 +71,7 @@ public class ClientEndpoint {
     }
 
     @DELETE
-    @Path("/delete/{id}")
+    @Path("/{id}")
     public Response delete(@PathParam("id") Long id) {
         itemRepository.deleteById(id);
         return Response.noContent().build();
