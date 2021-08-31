@@ -61,7 +61,7 @@ public class ClientEndpoint {
     }
 
     @PUT
-    @Path(value = "/save")
+    @Path(value = "/")
     public Response save(@Valid ClientSaveCommand cmd) {
         ClientEntity genre = itemRepository.save(cmd.getName());
 
