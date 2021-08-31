@@ -15,4 +15,7 @@ public class ClientSaveCommand {
 
     @NotBlank
     private String name;
+
+    @NotBlank
+    private String description;
 }
