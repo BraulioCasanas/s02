@@ -29,6 +29,7 @@ public class ClientEndpoint {
     @GET
     @Path(("/externalCall"))
 //    public Response externalCall() {
+//        return externalStore.externalCall();
     public Integer externalCall() {
         Integer records = externalStore.externalCall();
         log.info("records :: ".concat(records.toString()));
@@ -36,15 +37,15 @@ public class ClientEndpoint {
     }
 
     @GET
-    @Path("/{id}")
+    @Path("/detail/{id}")
     public ClientEntity show(@PathParam("id") Long id) {
         return itemRepository
                 .findById(id)
                 .orElse(null);
     }
 
-    @POST
-    @Path(value = "/{id}")
+    @PUT
+    @Path(value = "/update/{id}")
     public Response update(@PathParam("id") Long id, @Valid ClientUpdateCommand command) {
 
         if (itemRepository.findById(id).isEmpty()) {
@@ -65,8 +66,8 @@ public class ClientEndpoint {
         return itemRepository.findAll();
     }
 
-    @PUT
-    @Path(value = "/")
+    @POST
+    @Path(value = "/save")
     public Response save(@Valid ClientSaveCommand cmd) {
         ClientEntity genre = itemRepository.save(cmd.getName());
 
@@ -76,7 +77,7 @@ public class ClientEndpoint {
     }
 
     @DELETE
-    @Path("/{id}")
+    @Path("/delete/{id}")
     public Response delete(@PathParam("id") Long id) {
         itemRepository.deleteById(id);
         return Response.noContent().build();
